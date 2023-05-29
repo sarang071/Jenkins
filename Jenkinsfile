@@ -10,13 +10,13 @@ pipeline {
             environment{
                 registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
                 tag = "${env.RepoName}" + ':' + "$GIT_COMMIT"
-                
+                #file_path = "${workspace}/"
             }
             steps{
                 script{
                      docker.withRegistry(registry_endpoint, dh_creds) {
 
-                     def Image = docker.build(tag)
+                     def Image = docker.build(tag, file_path)
 
                      /* Push the container to the custom Registry */
                      Image.push()
