@@ -10,7 +10,7 @@ pipeline {
             environment{
                 registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
                 tag = "${env.RepoName}" + ':' + "$GIT_COMMIT"
-                #file_path = "${workspace}/docker/"
+                
             }
             steps{
                 script{
