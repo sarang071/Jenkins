@@ -16,7 +16,7 @@ pipeline {
                 script{
                      docker.withRegistry(registry_endpoint, dh_creds) {
 
-                     def Image = docker.build(tag, file_path)
+                     def Image = docker.build(tag)
 
                      /* Push the container to the custom Registry */
                      Image.push()
