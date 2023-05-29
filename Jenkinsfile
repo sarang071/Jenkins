@@ -11,7 +11,7 @@ pipeline {
     stages{
         stage('Builing image in Dev') {
            when expression{
-                params.Account == "dev"
+                params.Account == 'dev'
             }
             environment{
                 registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
