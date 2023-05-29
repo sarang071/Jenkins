@@ -1,12 +1,18 @@
 pipeline {
     agent any
+    parameters {
+        choice(name:'Account', choices: ['dev', 'qa', 'stage', 'prod'], description: "Pick Env")
+    }
     environment{
         RegistryURL = "https://registry.hub.docker.com/"
         RepoName = "sarangp007/sarang_cloudethix_nginx"
         dh_creds = 'dockerhub_creds'
     }
     stages{
-        stage('Builing image') {
+        stage('Builing image in Dev') {
+            when expression{
+                params.Account == "dev"
+            }
             environment{
                 registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
                 tag = "${env.RepoName}" + ':' + "$GIT_COMMIT"
