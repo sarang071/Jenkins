@@ -1,8 +1,9 @@
 pipeline {
     agent any
-    parameters {
-        choice(name:'Account', choices: ['dev', 'qa', 'stage', 'prod'], description: "Pick Env")
-    }
+    properties([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'StringParameterDefinition', name: 'Account', defaultValue: 'dev']]]])
+    //parameters {
+      //  choice(name:'Account', choices: ['dev', 'qa', 'stage', 'prod'], description: "Pick Env")
+    //}
     environment{
         RegistryURL = "https://registry.hub.docker.com/"
         RepoName = "sarangp007/sarang_cloudethix_nginx"
