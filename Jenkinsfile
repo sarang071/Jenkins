@@ -11,11 +11,11 @@ pipeline {
     stages{
         stage('Builing image in Dev') {
            when expression{
-                params.Account == 'dev'
+                params.Account == "dev"
             }
             environment{
                 registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
-                tag = "${env.RepoName}" + ':' + "$GIT_COMMIT"
+                tag = "${env.RepoName}" + ':' + "dev_$GIT_COMMIT"
                 file_path = "${workspace}/"
             }
             steps{
@@ -32,8 +32,31 @@ pipeline {
 
         }
     }
-    
+    stage('Builing image in QA') {
+           when expression{
+                params.Account == "qa"
+            }
+            environment{
+                registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
+                tag = "${env.RepoName}" + ':' + "qa_$GIT_COMMIT"
+                file_path = "${workspace}/"
+            }
+            steps{
+                script{
+                     docker.withRegistry(registry_endpoint, dh_creds) {
+
+                     def Image = docker.build(tag, file_path)
+
+                     /* Push the container to the custom Registry */
+                     Image.push()
+
+                 }
+            }
+
+        }
     }
+    }
+
   
 }
 //https://hub.docker.com/r/sarangp007/jenkins_docker
