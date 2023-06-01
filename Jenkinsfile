@@ -10,9 +10,9 @@ pipeline {
     }
     stages{
         stage('Builing image in Dev') {
-           /*when expression{
-                params.Account == "dev"*/
-            //}
+           when expression{
+                params.Account == "dev"
+            }
             environment{
                 registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
                 tag = "${env.RepoName}" + ':' + "$GIT_COMMIT"
@@ -33,9 +33,9 @@ pipeline {
         }
     }
     stage('Pushing to QA'){
-        /*when expression{
+        when expression{
             params.Account == "qa"
-          }*/
+          }
         environment{
             dev_registry_endpoint = 'https://' + "${env.RegistryURL}" + "${env.RepoName}"
             qa_registry_endpoint  = 'https://' + "${env.RegistryURL}" + "${env.RepoName}"
