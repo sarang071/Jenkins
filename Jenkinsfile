@@ -2,7 +2,7 @@ pipeline {
     agent any
     parameters {
         choice(name:'Account', choices: ['dev', 'qa'], description: "Pick Env")
-        string(name: 'CommitID', default:'latest' , description: "Give Commit ID")
+        string(name: 'CommitID', defaultValue:'latest' , description: "Give Commit ID")
     }
     environment{
         RegistryURL = "https://registry.hub.docker.com/"
