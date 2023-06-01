@@ -90,7 +90,7 @@ pipeline {
     stage('Pushing to Prod'){
         when { 
             expression {
-            params.Account == "qa"
+            params.Account == "prod"
           }
         }
         environment{
