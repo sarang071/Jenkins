@@ -29,7 +29,7 @@ pipeline {
 
                      /* Push the container to the custom Registry */
                      Image.push()
-                     sh 'echo GITCOMMIT'
+                     echo $GITCOMMIT
 
                  }
             }
