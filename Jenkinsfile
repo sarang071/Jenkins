@@ -33,9 +33,9 @@ pipeline {
         }
     }
     stage('Pushing to QA'){
-        when expression{
+        /*when expression{
             params.Account == "qa"
-        }
+        }*/
         environment{
             dev_registry_endpoint = 'https://' + "${env.registryURI}" + "${env.dev_registry}"
             qa_registry_endpoint  = 'https://' + "${env.registryURI}" + "${env.qa_registry}"
