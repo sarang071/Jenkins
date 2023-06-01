@@ -42,7 +42,6 @@ pipeline {
             dev_image             = "${registryURI}" + "${env.dev_registry}" + ':' + "${env.COMMITID}"
             qa_image              = "${registryURI}" + "${env.qa_registry}" + ':' + "${env.COMMITID}"
         }
-    }
     steps {
         script {
                 docker.withRegistry(dev_registry_endpoint, dev_dh_creds) {
@@ -57,5 +56,6 @@ pipeline {
             }
         }
     }
+  }
 }
 //https://hub.docker.com/r/sarangp007/jenkins_docker
