@@ -32,6 +32,7 @@ pipeline {
                      /* Push the container to the custom Registry */
                      //Image.push()
                      sh 'echo ${env.commitID}'
+                     commitId = sh(returnStdout: true, script: 'git rev-parse HEAD')
 
                  }
             }
