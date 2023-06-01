@@ -2,6 +2,7 @@ pipeline {
     agent any
     parameters {
         choice(name:'Account', choices: ['dev', 'qa'], description: "Pick Env")
+        string(name: 'CommitID', default:'latest' , description: "Give Commit ID")
     }
     environment{
         RegistryURL = "https://registry.hub.docker.com/"
@@ -35,21 +36,21 @@ pipeline {
         }
     }
     stage('Pushing to QA'){
-        when { expression {
+        when { 
+            expression {
             params.Account == "qa"
           }
         }
         environment{
             dev_registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
             qa_registry_endpoint  = "${env.RegistryURL}" + "${env.RepoName}"
-            tag = "${env.RepoName}" + ':' + "$GIT_COMMIT"
-            dev_image             = "${env.RegistryURL}" + "${env.RepoName}" + ':' + "$GITCOMMIT"
-            qa_image              = "${env.RegistryURL}" + "${env.RepoName}" + ':' + "${env.COMMITID}"
+            dev_image             = "${env.RegistryURL}" + "${env.RepoName}" + ':' + "$params.CommitID"
+            qa_image              = "${env.RegistryURL}" + "${env.RepoName}" + ':' + "$params.CommitID"
         }
     steps {
         script {
                 docker.withRegistry(dev_registry_endpoint, dh_creds) {
-                docker.image(dev_image).pull(env.tag)
+                docker.image(dev_image).pull()
                 }
                  sh 'echo Image pulled'
                  sh "docker tag ${env.dev_image} ${env.qa_image}"
