@@ -32,7 +32,7 @@ pipeline {
 
         }
     }
-    stage('Pushing to QA'){
+    /*stage('Pushing to QA'){
         when expression{
             params.Account == "qa"
           }
@@ -55,7 +55,7 @@ pipeline {
                 sh 'echo Image pushed'
             }
         }
-    }
+    }*/
   }
 }
 //https://hub.docker.com/r/sarangp007/jenkins_docker
