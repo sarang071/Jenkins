@@ -49,7 +49,7 @@ pipeline {
     steps {
         script {
                 docker.withRegistry(dev_registry_endpoint, dh_creds) {
-                docker.image(dev_image).pull()
+                docker.image(dev_image).pull(env.tag)
                 }
                  sh 'echo Image pulled'
                  sh "docker tag ${env.dev_image} ${env.qa_image}"
