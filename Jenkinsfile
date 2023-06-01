@@ -1,7 +1,7 @@
 pipeline {
     agent any
     parameters {
-        choice(name:'Account', choices: ['dev', 'qa'], description: "Pick Env")
+        choice(name:'Account', choices: ['dev', 'qa', 'stage', 'prod'], description: "Pick Env")
         string(name: 'CommitID', defaultValue:'latest' , description: "Give Commit ID")
     }
     environment{
@@ -36,6 +36,58 @@ pipeline {
         }
     }
     stage('Pushing to QA'){
+        when { 
+            expression {
+            params.Account == "qa"
+          }
+        }
+        environment{
+            dev_registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
+            qa_registry_endpoint  = "${env.RegistryURL}" + "${env.RepoName}"
+            dev_image             = "${env.RepoName}" + ":$params.CommitID"
+            qa_image              = "${env.RepoName}" + ":qa_$params.CommitID"
+        }
+    steps {
+        script {
+                docker.withRegistry(dev_registry_endpoint, dh_creds) {
+                docker.image(dev_image).pull()
+                }
+                 sh 'echo Image pulled'
+                 sh "docker tag ${env.dev_image} ${env.qa_image}"
+                 docker.withRegistry(qa_registry_endpoint, dh_creds) {
+                 docker.image(env.qa_image).push()
+                }
+                sh 'echo Image pushed'
+            }
+        }
+    }
+    stage('Pushing to Stage'){
+        when { 
+            expression {
+            params.Account == "stage"
+          }
+        }
+        environment{
+            qa_registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
+            stage_registry_endpoint  = "${env.RegistryURL}" + "${env.RepoName}"
+            qa_image              = "${env.RepoName}" + ":qa_$params.CommitID"
+            stage_image           = "${env.RepoName}" + ":stage_$params.CommitID"
+        }
+    steps {
+        script {
+                docker.withRegistry(qa_registry_endpoint, dh_creds) {
+                docker.image(qa_image).pull()
+                }
+                 sh 'echo Image pulled'
+                 sh "docker tag ${env.qa_image} ${env.stage_image}"
+                 docker.withRegistry(stage_registry_endpoint, dh_creds) {
+                 docker.image(env.stage_image).push()
+                }
+                sh 'echo Image pushed'
+            }
+        }
+    }
+    stage('Pushing to Prod'){
         when { 
             expression {
             params.Account == "qa"
