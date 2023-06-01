@@ -40,8 +40,8 @@ pipeline {
           }
         }
         environment{
-            dev_registry_endpoint = 'https://' + "${env.RegistryURL}" + "${env.RepoName}"
-            qa_registry_endpoint  = 'https://' + "${env.RegistryURL}" + "${env.RepoName}"
+            dev_registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
+            qa_registry_endpoint  = "${env.RegistryURL}" + "${env.RepoName}"
             dev_image             = "${env.RegistryURL}" + "${env.RepoName}" + ':' + "${env.COMMITID}"
             qa_image              = "${env.RegistryURL}" + "${env.RepoName}" + ':' + "${env.COMMITID}"
         }
@@ -52,7 +52,7 @@ pipeline {
                 }
                  sh 'echo Image pulled'
                  sh "docker tag ${env.dev_image} ${env.qa_image}"
-                 docker.withRegistry(qa_registry_endpoint , dh_creds) {
+                 docker.withRegistry(qa_registry_endpoint, dh_creds) {
                  docker.image(env.qa_image).push()
                 }
                 sh 'echo Image pushed'
