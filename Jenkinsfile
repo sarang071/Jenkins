@@ -20,15 +20,18 @@ pipeline {
                 registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
                 tag = "${env.RepoName}" + ':' + "$GIT_COMMIT"
                 file_path = "${workspace}/"
+                commitId = sh(returnStdout: true, script: 'git rev-parse HEAD')
+
             }
             steps{
                 script{
-                     docker.withRegistry(registry_endpoint, dh_creds) {
+                     //docker.withRegistry(registry_endpoint, dh_creds) {
 
-                     def Image = docker.build(tag, file_path)
+                     //def Image = docker.build(tag, file_path)
 
                      /* Push the container to the custom Registry */
-                     Image.push()
+                     //Image.push()
+                     sh 'echo ${env.commitID}'
 
                  }
             }
@@ -49,19 +52,15 @@ pipeline {
         }
     steps {
         script {
-                //docker.withRegistry(dev_registry_endpoint, dh_creds) {
-                //docker.image(dev_image).pull()
-                //}
-                 /*sh 'echo Image pulled'
+                docker.withRegistry(dev_registry_endpoint, dh_creds) {
+                docker.image(dev_image).pull()
+                }
+                 sh 'echo Image pulled'
                  sh "docker tag ${env.dev_image} ${env.qa_image}"
                  docker.withRegistry(qa_registry_endpoint, dh_creds) {
                  docker.image(env.qa_image).push()
-                }*/
+                }
                 sh 'echo Image pushed'
-                sh 'echo Image pushed'
-                commitId = sh(returnStdout: true, script: 'git rev-parse HEAD')
-                sh 'echo $commitID'
-                
             }
         }
     }
@@ -94,7 +93,7 @@ pipeline {
     stage('Pushing to Prod'){
         when { 
             expression {
-            params.Account == "prod"
+            params.Account == ""
           }
         }
         environment{
