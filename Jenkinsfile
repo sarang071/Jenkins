@@ -1,7 +1,7 @@
 pipeline {
     agent any
     parameters {
-        choice(name:'Account', choices: ['dev'], description: "Pick Env")
+        choice(name:'Account', choices: ['dev', 'qa'], description: "Pick Env")
     }
     environment{
         RegistryURL = "https://registry.hub.docker.com/"
@@ -34,10 +34,11 @@ pipeline {
 
         }
     }
-    /*stage('Pushing to QA'){
-        when expression{
+    stage('Pushing to QA'){
+        when { expression {
             params.Account == "qa"
           }
+        }
         environment{
             dev_registry_endpoint = 'https://' + "${env.RegistryURL}" + "${env.RepoName}"
             qa_registry_endpoint  = 'https://' + "${env.RegistryURL}" + "${env.RepoName}"
@@ -57,7 +58,7 @@ pipeline {
                 sh 'echo Image pushed'
             }
         }
-    }*/
+    }
   }
 }
 //https://hub.docker.com/r/sarangp007/jenkins_docker
