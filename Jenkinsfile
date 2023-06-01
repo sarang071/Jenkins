@@ -25,12 +25,13 @@ pipeline {
             }
             steps{
                 script{
-                     //docker.withRegistry(registry_endpoint, dh_creds) {
+                     docker.withRegistry(registry_endpoint, dh_creds) {
 
-                     //def Image = docker.build(tag, file_path)
+                     def Image = docker.build(tag, file_path)
 
-                     /* Push the container to the custom Registry */
-                     //Image.push()
+                     Push the container to the custom Registry
+                     Image.push()
+                    }
                      sh 'echo ${env.commitID}'
                      commitId = sh(returnStdout: true, script: 'git rev-parse HEAD')
 
@@ -117,6 +118,5 @@ pipeline {
             }
         }
     }
-  }
 }
 //https://hub.docker.com/r/sarangp007/jenkins_docker
