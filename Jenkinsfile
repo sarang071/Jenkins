@@ -1,7 +1,7 @@
 pipeline {
     agent any
     parameters {
-        choice(name:'Account', choices: ['dev', 'qa', 'stage', 'prod'], description: "Pick Env")
+        choice(name:'Account', choices: ['dev'], description: "Pick Env")
     }
     environment{
         RegistryURL = "https://registry.hub.docker.com/"
