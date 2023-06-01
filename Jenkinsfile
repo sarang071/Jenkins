@@ -20,8 +20,6 @@ pipeline {
                 registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
                 tag = "${env.RepoName}" + ':' + "$GIT_COMMIT"
                 file_path = "${workspace}/"
-                commitId = sh(returnStdout: true, script: 'git rev-parse HEAD')
-
             }
             steps{
                 script{
@@ -29,11 +27,8 @@ pipeline {
 
                      def Image = docker.build(tag, file_path)
 
-                     Push the container to the custom Registry
+                     /* Push the container to the custom Registry */
                      Image.push()
-                    }
-                     sh 'echo ${env.commitID}'
-                     commitId = sh(returnStdout: true, script: 'git rev-parse HEAD')
 
                  }
             }
@@ -95,28 +90,29 @@ pipeline {
     stage('Pushing to Prod'){
         when { 
             expression {
-            params.Account == ""
+            params.Account == "prod"
           }
         }
         environment{
-            dev_registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
-            qa_registry_endpoint  = "${env.RegistryURL}" + "${env.RepoName}"
-            dev_image             = "${env.RepoName}" + ":$params.CommitID"
-            qa_image              = "${env.RepoName}" + ":qa_$params.CommitID"
+            stageregistry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
+            prod_registry_endpoint  = "${env.RegistryURL}" + "${env.RepoName}"
+            stage_image             = "${env.RepoName}" + ":stage_$params.CommitID"
+            prod_image              = "${env.RepoName}" + ":prod_$params.CommitID"
         }
     steps {
         script {
-                docker.withRegistry(dev_registry_endpoint, dh_creds) {
+                docker.withRegistry(stage_registry_endpoint, dh_creds) {
                 docker.image(dev_image).pull()
                 }
                  sh 'echo Image pulled'
-                 sh "docker tag ${env.dev_image} ${env.qa_image}"
-                 docker.withRegistry(qa_registry_endpoint, dh_creds) {
-                 docker.image(env.qa_image).push()
+                 sh "docker tag ${env.stage_image} ${env.prod_image}"
+                 docker.withRegistry(prod_registry_endpoint, dh_creds) {
+                 docker.image(env.prod_image).push()
                 }
                 sh 'echo Image pushed'
             }
         }
     }
+  }
 }
 //https://hub.docker.com/r/sarangp007/jenkins_docker
