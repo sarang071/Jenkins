@@ -10,9 +10,9 @@ pipeline {
     }
     stages{
         stage('Builing image in Dev') {
-           when expression{
+           /*when expression{
                 params.Account == "dev"
-            }
+            }*/
             environment{
                 registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
                 tag = "${env.RepoName}" + ':' + "$GIT_COMMIT"
