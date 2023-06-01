@@ -117,6 +117,5 @@ pipeline {
             }
         }
     }
-  }
 }
 //https://hub.docker.com/r/sarangp007/jenkins_docker
