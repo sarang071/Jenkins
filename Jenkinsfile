@@ -44,7 +44,7 @@ pipeline {
         environment{
             dev_registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
             qa_registry_endpoint  = "${env.RegistryURL}" + "${env.RepoName}"
-            dev_image             = "${env.RegistryURL}" + "${env.RepoName}" + ':' + "$params.CommitID"
+            dev_image             = "${env.RepoName}" + ':' + "$params.CommitID"
             qa_image              = "${env.RegistryURL}" + "${env.RepoName}" + ':' + "$params.CommitID"
         }
     steps {
