@@ -66,10 +66,10 @@ pipeline {
                             sh 'echo Cleaning docker Images from Jenkins.'
                             sh "docker rmi ${env.dev_image}"
                             sh "docker rmi ${env.qa_image}"
-                        }
-                    }
+                }
             }
         }
- }  
-}
+    }
+}  
+
 //https://hub.docker.com/r/sarangp007/jenkins_docker
