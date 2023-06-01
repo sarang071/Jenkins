@@ -23,16 +23,12 @@ pipeline {
             }
             steps{
                 script{
-                     //docker.withRegistry(registry_endpoint, dh_creds) {
+                     docker.withRegistry(registry_endpoint, dh_creds) {
 
-                     //def Image = docker.build(tag, file_path)
+                     def Image = docker.build(tag, file_path)
 
                      /* Push the container to the custom Registry */
-                     //Image.push()
-                     sh "git rev-parse --short HEAD > .git/commit-id"                        
-                     commit_id = readFile('.git/commit-id')
-                     sh '$commit_id'
-                     sh 'echo $GITCOMMIT'
+                     Image.push()
 
                  }
             }
@@ -48,20 +44,23 @@ pipeline {
         environment{
             dev_registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
             qa_registry_endpoint  = "${env.RegistryURL}" + "${env.RepoName}"
-            dev_image             = "${env.RepoName}" + ":$GITCOMMIT"
-            qa_image              = "${env.RepoName}" + ":qa_$GITCOMMIT"
+            dev_image             = "${env.RepoName}" + ":$params.CommitID"
+            qa_image              = "${env.RepoName}" + ":qa_$params.CommitID"
         }
     steps {
         script {
-                docker.withRegistry(dev_registry_endpoint, dh_creds) {
-                docker.image(dev_image).pull()
-                }
-                 sh 'echo Image pulled'
+                //docker.withRegistry(dev_registry_endpoint, dh_creds) {
+                //docker.image(dev_image).pull()
+                //}
+                 /*sh 'echo Image pulled'
                  sh "docker tag ${env.dev_image} ${env.qa_image}"
                  docker.withRegistry(qa_registry_endpoint, dh_creds) {
                  docker.image(env.qa_image).push()
-                }
+                }*/
                 sh 'echo Image pushed'
+                commitId = sh(returnStdout: true, script: 'git rev-parse HEAD')
+                sh 'echo $commitID'
+                
             }
         }
     }
@@ -117,5 +116,6 @@ pipeline {
             }
         }
     }
+  }
 }
 //https://hub.docker.com/r/sarangp007/jenkins_docker
