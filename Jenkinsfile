@@ -10,7 +10,7 @@ pipeline {
     }
     stages{
         stage('Builing image in Dev') {
-           when expression{
+           when expression {
                 params.Account == 'dev'
             }
             environment{
