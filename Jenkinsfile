@@ -6,7 +6,7 @@ pipeline {
     environment{
         RegistryURL = "https://registry.hub.docker.com/"
         RepoName = "sarangp007/sarang_cloudethix_nginx"
-        dh_creds = 'dockerhub_creds'
+        dh_creds = 'dh_creds_dev'
     }
     stages{
         stage('Builing image in Dev') {
