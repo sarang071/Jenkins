@@ -23,12 +23,15 @@ pipeline {
             }
             steps{
                 script{
-                     docker.withRegistry(registry_endpoint, dh_creds) {
+                     //docker.withRegistry(registry_endpoint, dh_creds) {
 
-                     def Image = docker.build(tag, file_path)
+                     //def Image = docker.build(tag, file_path)
 
                      /* Push the container to the custom Registry */
-                     Image.push()
+                     //Image.push()
+                     sh "git rev-parse --short HEAD > .git/commit-id"                        
+                     commit_id = readFile('.git/commit-id')
+                     sh '$commit_id'
                      sh 'echo $GITCOMMIT'
 
                  }
