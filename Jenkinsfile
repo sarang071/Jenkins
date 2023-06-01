@@ -10,8 +10,8 @@ pipeline {
     }
     stages{
         stage('Builing image in Dev') {
-           when expression{
-                params.Account == "dev"
+           //when expression{
+                //params.Account == "dev"
             }
             environment{
                 registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
@@ -27,11 +27,9 @@ pipeline {
                      /* Push the container to the custom Registry */
                      Image.push()
 
-                 }
-            }
-
-        }
-    }
+                    }
+                }
+            } 
     stage('Push the Docker Image in QA') {
                 when {
                     expression {
@@ -39,10 +37,10 @@ pipeline {
                     }
                 }
                     environment {
-                        dev_registry_endpoint = 'https://' + "${env.registryURI}" + "${env.dev_registry}"
-                        qa_registry_endpoint  = 'https://' + "${env.registryURI}" + "${env.qa_registry}"
-                        dev_image             = "${registryURI}" + "${env.dev_registry}" + ':' + "${env.COMMITID}"
-                        qa_image              = "${registryURI}" + "${env.qa_registry}" + ':' + "${env.COMMITID}"
+                        dev_registry_endpoint = 'https://' + "${env.RegistryURL}" + "${env.Reponame}"
+                        qa_registry_endpoint  = 'https://' + "${env.RegistryURL}" + "${env.Reponame}"
+                        dev_image             = "${RegistryURL}" + "${env.Reponame}" + ':' + "${env.COMMITID}"
+                        qa_image              = "${RegistryURL}" + "${env.Reponame}" + ':' + "${env.COMMITID}"
                     }
                     steps {
                         script {
@@ -66,10 +64,10 @@ pipeline {
                             sh 'echo Cleaning docker Images from Jenkins.'
                             sh "docker rmi ${env.dev_image}"
                             sh "docker rmi ${env.qa_image}"
-                }
             }
         }
     }
-}  
+ }
+}
 
 //https://hub.docker.com/r/sarangp007/jenkins_docker
