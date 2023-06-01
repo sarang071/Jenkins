@@ -58,6 +58,7 @@ pipeline {
                  docker.image(env.qa_image).push()
                 }*/
                 sh 'echo Image pushed'
+                sh 'echo Image pushed'
                 commitId = sh(returnStdout: true, script: 'git rev-parse HEAD')
                 sh 'echo $commitID'
                 
