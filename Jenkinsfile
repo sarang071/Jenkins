@@ -11,8 +11,8 @@ pipeline {
     stages{
         stage('Builing image in Dev') {
            /*when expression{
-                params.Account == "dev"
-            }*/
+                params.Account == "dev"*/
+            //}
             environment{
                 registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
                 tag = "${env.RepoName}" + ':' + "dev_$GIT_COMMIT"
@@ -34,8 +34,8 @@ pipeline {
     }
     stage('Pushing to QA'){
         /*when expression{
-            params.Account == "qa"*/
-        }
+            params.Account == "qa"
+          }*/
         environment{
             dev_registry_endpoint = 'https://' + "${env.registryURI}" + "${env.dev_registry}"
             qa_registry_endpoint  = 'https://' + "${env.registryURI}" + "${env.qa_registry}"
@@ -56,6 +56,5 @@ pipeline {
                 sh 'echo Image pushed'
             }
         }
-    }
 }
 //https://hub.docker.com/r/sarangp007/jenkins_docker
