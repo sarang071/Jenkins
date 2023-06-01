@@ -94,7 +94,7 @@ pipeline {
           }
         }
         environment{
-            stageregistry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
+            stage_registry_endpoint = "${env.RegistryURL}" + "${env.RepoName}"
             prod_registry_endpoint  = "${env.RegistryURL}" + "${env.RepoName}"
             stage_image             = "${env.RepoName}" + ":stage_$params.CommitID"
             prod_image              = "${env.RepoName}" + ":prod_$params.CommitID"
