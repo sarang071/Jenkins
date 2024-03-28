@@ -1,4 +1,6 @@
 
+![[Pasted image 20240328173650.png]]
+
 ## Resource Details
 
 |   |   |   |
